@@ -44,6 +44,8 @@ def main():
 
 		data = json.load(open(json_file[i]))
 		imageData = data.get("imageData")
+		is_labeled = data.get("shapes")
+		
 
 		if not imageData:
 			imagePath = os.path.join(os.path.dirname(json_file[i]), data["imagePath"])
@@ -71,8 +73,10 @@ def main():
 		# lbl_viz = imgviz.label2rgb(
 		# 	label=lbl, img=imgviz.asgray(img), label_names=label_names, loc="rb"
 		# )
-
-		PIL.Image.fromarray(img).save(osp.join(out_dir, f"{json_file[i]}.bmp"))
+		if is_labeled != []:
+			PIL.Image.fromarray(img).save(osp.join(out_dir, f"{json_file[i]}.bmp"))
+		else:
+			os.remove(json_file[i])
 		
 		logger.info("Saved to: {}".format(out_dir))
 
